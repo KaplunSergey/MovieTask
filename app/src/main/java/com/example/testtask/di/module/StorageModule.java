@@ -17,8 +17,8 @@ public class StorageModule {
     @Provides
     @Singleton
     @NonNull
-    Storage provideStorage() {
-        return new StorageImpl();
+    Storage provideStorage(DbHelper dbHelper) {
+        return new StorageImpl(dbHelper);
     }
 
     @Provides

@@ -22,8 +22,8 @@ public class NetworkModule {
     @Provides
     @Singleton
     @NonNull
-    Network provideNetwork() {
-        return new NetworkImpl();
+    Network provideNetwork(Retrofit retrofit) {
+        return new NetworkImpl(retrofit);
     }
 
     @Provides

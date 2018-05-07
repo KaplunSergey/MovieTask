@@ -3,8 +3,10 @@ package com.example.testtask.data.database;
 import java.util.List;
 
 public interface Storage {
-    void addFilms(List<Film> films);
-    Film getFilm(long id);
-    List<Film> getAllFilms();
-    void updateBookmarkInFilm(long id, boolean bookmark);
+    void addMovies(List<Movie> movies);
+    Movie getMovie(int id);
+    List<Movie> getMovies();
+    void updateMoviesBookmark(int id, boolean bookmark);
+    boolean moviesDownloaded();
+    void deleteMovies();
 }

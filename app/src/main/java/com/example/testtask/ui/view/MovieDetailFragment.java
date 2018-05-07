@@ -13,6 +13,11 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView{
     MovieDetailPresenter movieDetailPresenter;
 
     public MovieDetailFragment() {
-        App.getPresenterComponent().inject(this);
+        App.getAppComponent().inject(this);
+    }
+
+    @Override
+    public void changeBookmark() {
+
     }
 }

@@ -1,8 +1,8 @@
 package com.example.testtask.data.network;
 
-import java.util.List;
+import com.example.testtask.data.callback.MoviesDownloadListener;
 
 public interface Network {
 
-    List<FilmModel> downloadFilmsModels();
+    void downloadMovies(MoviesDownloadListener moviesDownloadListener);
 }

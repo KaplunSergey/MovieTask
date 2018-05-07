@@ -5,7 +5,8 @@ import com.example.testtask.di.module.NetworkModule;
 import com.example.testtask.di.module.PresenterModule;
 import com.example.testtask.di.module.RepositoryModule;
 import com.example.testtask.di.module.StorageModule;
-import com.example.testtask.ui.MainActivity;
+import com.example.testtask.ui.view.MovieDetailFragment;
+import com.example.testtask.ui.view.MoviesFragment;
 
 import javax.inject.Singleton;
 
@@ -15,5 +16,6 @@ import dagger.Component;
 @Component(modules = {AppModule.class, NetworkModule.class, PresenterModule.class,
         RepositoryModule.class, StorageModule.class})
 public interface AppComponent {
-    void inject(MainActivity activity);
+    void inject(MoviesFragment moviesFragment);
+    void inject(MovieDetailFragment movieDetailFragment);
 }

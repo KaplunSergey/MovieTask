@@ -1,9 +1,9 @@
 package com.example.testtask.data.database;
 
-public class FilmTable {
-    public static final String TABLE = "movies";
+public interface MovieTable {
+    String TABLE = "movies";
 
-    public static class COLUMN {
+    class COLUMN {
         public static final String ID = "_id";
         public static final String TITLE = "title";
         public static final String IMAGE = "image";
@@ -15,11 +15,11 @@ public class FilmTable {
         public static final String[] ALL_KEYS = new String[]{ID, TITLE, IMAGE, RATING, YEAR, GENRE, BOOKMARK};
     }
 
-    public static final String CREATE_SCRIPT =
+    String CREATE_SCRIPT =
             String.format("create table %s ("
                             + "%s integer primary key autoincrement,"
                             + "%s text,"
-                            + "%s blob,"
+                            + "%s text,"
                             + "%s real,"
                             + "%s integer,"
                             + "%s text,"

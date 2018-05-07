@@ -1,37 +1,42 @@
 package com.example.testtask.data.database;
 
-import com.example.testtask.App;
-
 import java.util.List;
-
-import javax.inject.Inject;
 
 public class StorageImpl implements Storage {
 
-    @Inject
     DbHelper dbHelper;
 
-    public StorageImpl() {
-        App.getStorageComponent().inject(this);
+    public StorageImpl(DbHelper dbHelper) {
+        this.dbHelper = dbHelper;
     }
 
     @Override
-    public void addFilms(List<Film> films) {
-
+    public void addMovies(List<Movie> movies) {
+        dbHelper.addMovies(movies);
     }
 
     @Override
-    public Film getFilm(long id) {
-        return null;
+    public Movie getMovie(int id) {
+        return dbHelper.getMovie(id);
     }
 
     @Override
-    public List<Film> getAllFilms() {
-        return null;
+    public List<Movie> getMovies() {
+        return dbHelper.getMovies();
     }
 
     @Override
-    public void updateBookmarkInFilm(long id, boolean bookmark) {
+    public void updateMoviesBookmark(int id, boolean bookmark) {
+        dbHelper.updateMovieBookmark(id, bookmark);
+    }
 
+    @Override
+    public boolean moviesDownloaded() {
+        return dbHelper.moviesDownloaded();
+    }
+
+    @Override
+    public void deleteMovies() {
+        dbHelper.deleteMovies();
     }
 }

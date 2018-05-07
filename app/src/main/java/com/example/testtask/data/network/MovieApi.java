@@ -5,9 +5,9 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 
-public interface FilmApi {
+public interface MovieApi {
 
     @GET
-    Call<List<FilmModel>> getMovies();
+    Call<List<MovieModel>> getMovies();
 
 }

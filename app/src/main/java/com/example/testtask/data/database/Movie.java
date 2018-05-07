@@ -2,20 +2,20 @@ package com.example.testtask.data.database;
 
 import java.util.List;
 
-public class Film {
-    private long id;
+public class Movie {
+    private int id;
     private String title;
-    private byte[] image;
+    private String imageUrl;
     private float rating;
     private int year;
     private List<String> genre;
     private boolean bookmark;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -27,12 +27,12 @@ public class Film {
         this.title = title;
     }
 
-    public byte[] getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public float getRating() {
