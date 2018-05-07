@@ -1,9 +1,11 @@
 package com.example.testtask.di.module;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.example.testtask.database.Storage;
-import com.example.testtask.database.StorageImpl;
+import com.example.testtask.data.database.DbHelper;
+import com.example.testtask.data.database.Storage;
+import com.example.testtask.data.database.StorageImpl;
 
 import javax.inject.Singleton;
 
@@ -17,5 +19,11 @@ public class StorageModule {
     @NonNull
     Storage provideStorage() {
         return new StorageImpl();
+    }
+
+    @Provides
+    @Singleton
+    DbHelper provideDbHelper(Context context) {
+        return new DbHelper(context);
     }
 }

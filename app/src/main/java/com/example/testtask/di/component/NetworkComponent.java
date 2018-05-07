@@ -1,7 +1,6 @@
 package com.example.testtask.di.component;
 
-import com.example.testtask.di.module.NetworkUtilsModule;
-import com.example.testtask.network.NetworkImpl;
+import com.example.testtask.data.network.NetworkImpl;
 
 import javax.inject.Singleton;
 

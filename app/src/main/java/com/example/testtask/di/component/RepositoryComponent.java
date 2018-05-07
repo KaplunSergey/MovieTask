@@ -1,15 +1,16 @@
 package com.example.testtask.di.component;
 
-import com.example.testtask.di.module.NetworkModule;
-import com.example.testtask.di.module.StorageModule;
-import com.example.testtask.mvp.RepositoryImpl;
+import com.example.testtask.di.module.RepositoryModule;
+import com.example.testtask.ui.presenter.MovieDetailPresenterImpl;
+import com.example.testtask.ui.presenter.MoviesPresenterImpl;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
 
 @Singleton
-@Component(modules = {StorageModule.class, NetworkModule.class})
+@Component(modules = {RepositoryModule.class})
 public interface RepositoryComponent {
-    void inject(RepositoryImpl repository);
+    void inject(MovieDetailPresenterImpl movieDetailPresenter);
+    void inject(MoviesPresenterImpl moviesPresenter);
 }

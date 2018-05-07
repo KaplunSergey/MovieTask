@@ -2,30 +2,33 @@ package com.example.testtask;
 
 import android.app.Application;
 
-import com.example.testtask.base.Constans;
+import com.example.testtask.di.component.DaggerDataComponent;
 import com.example.testtask.di.component.DaggerNetworkComponent;
 import com.example.testtask.di.component.DaggerPresenterComponent;
 import com.example.testtask.di.component.DaggerRepositoryComponent;
 import com.example.testtask.di.component.DaggerStorageComponent;
+import com.example.testtask.di.component.DataComponent;
 import com.example.testtask.di.component.NetworkComponent;
 import com.example.testtask.di.component.PresenterComponent;
 import com.example.testtask.di.component.RepositoryComponent;
 import com.example.testtask.di.component.StorageComponent;
 import com.example.testtask.di.module.AppModule;
-import com.example.testtask.di.module.NetworkUtilsModule;
 
 public class App extends Application{
 
     private static PresenterComponent presenterComponent;
-    private static RepositoryComponent repositoryComponent;
+    private static DataComponent dataComponent;
     private static NetworkComponent networkComponent;
     private static StorageComponent storageComponent;
+    private static RepositoryComponent repositoryComponent;
 
     @Override
     public void onCreate(){
         super.onCreate();
 
         presenterComponent = DaggerPresenterComponent.builder()
+                .build();
+        dataComponent = DaggerDataComponent.builder()
                 .build();
         repositoryComponent = DaggerRepositoryComponent.builder()
                 .build();
@@ -39,6 +42,10 @@ public class App extends Application{
 
     public static PresenterComponent getPresenterComponent() {
         return presenterComponent;
+    }
+
+    public static DataComponent getDataComponent() {
+        return dataComponent;
     }
 
     public static RepositoryComponent getRepositoryComponent() {
