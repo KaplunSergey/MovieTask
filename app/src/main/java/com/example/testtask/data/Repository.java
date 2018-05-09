@@ -1,6 +1,6 @@
 package com.example.testtask.data;
 
-import com.example.testtask.data.callback.MoviesDownloadListener;
+import com.example.testtask.callback.MoviesDownloadListener;
 import com.example.testtask.data.database.Movie;
 
 import java.util.List;

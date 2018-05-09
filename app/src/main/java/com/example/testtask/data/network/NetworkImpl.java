@@ -1,6 +1,6 @@
 package com.example.testtask.data.network;
 
-import com.example.testtask.data.callback.MoviesDownloadListener;
+import com.example.testtask.callback.MoviesDownloadListener;
 import com.example.testtask.data.database.Movie;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import retrofit2.Retrofit;
 
 public class NetworkImpl implements Network {
 
-    Retrofit retrofit;
+    private Retrofit retrofit;
 
     public NetworkImpl(Retrofit retrofit) {
         this.retrofit = retrofit;

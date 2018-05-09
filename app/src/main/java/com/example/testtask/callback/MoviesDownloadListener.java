@@ -1,4 +1,4 @@
-package com.example.testtask.data.callback;
+package com.example.testtask.callback;
 
 import com.example.testtask.data.database.Movie;
 

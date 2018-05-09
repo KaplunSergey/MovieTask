@@ -6,7 +6,8 @@ import com.example.testtask.ui.view.MovieDetailView;
 
 public interface MovieDetailPresenter<V extends MovieDetailView> {
     void attachView(@NonNull V view);
+    void setMovieId(int movieId);
     void detachView();
-    void bookmarkMovie();
+    void bookmarkButtonClicked();
     void onBack();
 }

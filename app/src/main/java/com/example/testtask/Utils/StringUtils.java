@@ -5,7 +5,7 @@ import java.util.List;
 
 public final class StringUtils {
 
-    public static final String LIST_SEPARATOR = "_";
+    private static final String LIST_SEPARATOR = ",";
 
     public static String convertListToString(List<String> list){
         String str = "";

@@ -23,7 +23,7 @@ public interface MovieTable {
                             + "%s real,"
                             + "%s integer,"
                             + "%s text,"
-                            + "%s integer default 0," + ");",
+                            + "%s integer default 0" + ");",
                     TABLE, COLUMN.ID, COLUMN.TITLE, COLUMN.IMAGE,
                     COLUMN.RATING, COLUMN.YEAR, COLUMN.GENRE, COLUMN.BOOKMARK);
 }

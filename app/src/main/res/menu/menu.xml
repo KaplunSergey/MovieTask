@@ -1,0 +1,37 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/synchronize_button"
+        android:title=""
+        app:showAsAction="always"
+        android:icon="@android:drawable/stat_notify_sync"
+        />
+
+    <item
+        android:id="@+id/sort_button"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:orderInCategory="1"
+        android:title="@string/menu_title"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/rating_up"
+                android:icon="@android:drawable/arrow_up_float"
+                android:title="@string/menu_rating"/>
+            <item
+                android:id="@+id/rating_down"
+                android:icon="@android:drawable/arrow_down_float"
+                android:title="@string/menu_rating"/>
+            <item
+                android:id="@+id/year_up"
+                android:icon="@android:drawable/arrow_up_float"
+                android:title="@string/menu_release_year">
+            </item>
+            <item
+                android:id="@+id/year_down"
+                android:icon="@android:drawable/arrow_down_float"
+                android:title="@string/menu_release_year">
+            </item>
+        </menu>
+    </item>
+</menu>

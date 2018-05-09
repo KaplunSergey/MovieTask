@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.testtask.Utils.MovieUtils;
 import com.example.testtask.Utils.StringUtils;
 
 import java.util.ArrayList;
@@ -14,8 +15,8 @@ import java.util.List;
 
 public class DbHelper extends SQLiteOpenHelper implements DbHandler {
 
-    public static final String NAME = "movie";
-    public static final int VERSION = 1;
+    private static final String NAME = "movie";
+    private static final int VERSION = 1;
 
     public DbHelper(Context context) {
         super(context, NAME, null, VERSION);
@@ -41,8 +42,8 @@ public class DbHelper extends SQLiteOpenHelper implements DbHandler {
             contentValues.put(MovieTable.COLUMN.IMAGE, movie.getImageUrl());
             contentValues.put(MovieTable.COLUMN.RATING, movie.getRating());
             contentValues.put(MovieTable.COLUMN.YEAR, movie.getYear());
-            String list = StringUtils.convertListToString(movie.getGenre());
-            contentValues.put(MovieTable.COLUMN.TITLE, list);
+            String genre = StringUtils.convertListToString(movie.getGenre());
+            contentValues.put(MovieTable.COLUMN.GENRE, genre);
 
             db.insert(MovieTable.TABLE, null, contentValues);
         }
@@ -61,15 +62,7 @@ public class DbHelper extends SQLiteOpenHelper implements DbHandler {
             cursor.moveToFirst();
         }
 
-        Movie movie = new Movie();
-        movie.setId(cursor.getInt(0));
-        movie.setTitle(cursor.getString(1));
-        movie.setImageUrl(cursor.getString(2));
-        movie.setRating(cursor.getInt(3));
-        movie.setYear(cursor.getInt(4));
-        List<String> genre = StringUtils.convertStringToList(cursor.getString(5));
-        movie.setGenre(genre);
-        movie.setBookmark(cursor.getInt(6) != 0);
+        Movie movie = MovieUtils.getMovieByCursor(cursor);
 
         cursor.close();
         db.close();
@@ -87,15 +80,7 @@ public class DbHelper extends SQLiteOpenHelper implements DbHandler {
 
         if (cursor.moveToFirst()) {
             do {
-                Movie movie = new Movie();
-                movie.setId(cursor.getInt(0));
-                movie.setTitle(cursor.getString(1));
-                movie.setImageUrl(cursor.getString(2));
-                movie.setRating(cursor.getInt(3));
-                movie.setYear(cursor.getInt(4));
-                List<String> genre = StringUtils.convertStringToList(cursor.getString(5));
-                movie.setGenre(genre);
-                movie.setBookmark(cursor.getInt(6) != 0);
+                Movie movie = MovieUtils.getMovieByCursor(cursor);
                 movies.add(movie);
             } while (cursor.moveToNext());
         }
@@ -108,12 +93,13 @@ public class DbHelper extends SQLiteOpenHelper implements DbHandler {
 
     @Override
     public boolean moviesDownloaded() {
-        String countQuery = "select  * from " + MovieTable.TABLE;
+        String countQuery = "select * from " + MovieTable.TABLE;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.close();
+        boolean moviesDownloaded = cursor.getCount() > 0;
 
-        return cursor.getCount() > 0;
+        cursor.close();
+        return moviesDownloaded;
     }
 
     @Override

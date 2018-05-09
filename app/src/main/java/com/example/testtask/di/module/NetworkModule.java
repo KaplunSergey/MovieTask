@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class NetworkModule {
 
-    private static final String BASE_URL = "https://api.androidhive.info/json/movies.json";
+    private static final String BASE_URL = "https://api.androidhive.info/json/";
 
     @Provides
     @Singleton

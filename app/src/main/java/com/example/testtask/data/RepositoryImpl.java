@@ -1,6 +1,6 @@
 package com.example.testtask.data;
 
-import com.example.testtask.data.callback.MoviesDownloadListener;
+import com.example.testtask.callback.MoviesDownloadListener;
 import com.example.testtask.data.database.Movie;
 import com.example.testtask.data.database.Storage;
 import com.example.testtask.data.network.Network;
@@ -9,8 +9,8 @@ import java.util.List;
 
 public class RepositoryImpl implements Repository {
 
-    Network network;
-    Storage storage;
+    private Network network;
+    private Storage storage;
 
     public RepositoryImpl(Network network, Storage storage) {
         this.network = network;

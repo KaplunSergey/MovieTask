@@ -7,8 +7,8 @@ import com.example.testtask.ui.view.MoviesView;
 public interface MoviesPresenter<V extends MoviesView> {
     void attachView(@NonNull V view);
     void detachView();
-    void sortMovies();
+    void sortMovies(V.Sort sort);
     void updateMovies();
-    void openMoviesDetails(int movieId);
-    void loadMovies();
+    void selectedMovie(int movieId);
+    void viewIsReady();
 }

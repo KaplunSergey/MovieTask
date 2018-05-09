@@ -1,6 +1,6 @@
 package com.example.testtask.data.network;
 
-import com.example.testtask.data.callback.MoviesDownloadListener;
+import com.example.testtask.callback.MoviesDownloadListener;
 
 public interface Network {
 

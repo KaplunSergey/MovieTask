@@ -4,7 +4,7 @@ import java.util.List;
 
 public class StorageImpl implements Storage {
 
-    DbHelper dbHelper;
+    private DbHelper dbHelper;
 
     public StorageImpl(DbHelper dbHelper) {
         this.dbHelper = dbHelper;
