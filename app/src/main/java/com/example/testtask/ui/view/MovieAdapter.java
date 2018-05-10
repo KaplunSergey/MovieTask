@@ -47,10 +47,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MoviesViewHo
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickMovieListener.clickMovie(movies.get(position).getId());
+                clickMovieListener.movieClicked(movies.get(position).getId(), position);
             }
         });
         holder.movieBookmark.setChecked(movies.get(position).isBookmark());
+    }
+
+    public void itemChanged(Movie model, int position) {
+        movies.set(position, model);
+        notifyItemChanged(position);
     }
 
     @Override

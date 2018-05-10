@@ -19,8 +19,8 @@ import android.widget.Toast;
 import com.example.testtask.App;
 import com.example.testtask.R;
 import com.example.testtask.callback.ClickMovieListener;
+import com.example.testtask.common.Constant;
 import com.example.testtask.data.database.Movie;
-import com.example.testtask.ui.MovieDetailActivity;
 import com.example.testtask.ui.presenter.MoviesPresenter;
 
 import java.util.List;
@@ -32,10 +32,9 @@ import static android.app.Activity.RESULT_OK;
 public class MoviesFragment extends Fragment implements MoviesView {
 
     private static final int REQUEST_CODE = 1;
-    private static final String MOVIE_ID = "movie id";
+
     @Inject
     MoviesPresenter moviesPresenter;
-
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private MovieAdapter movieAdapter;
@@ -47,19 +46,17 @@ public class MoviesFragment extends Fragment implements MoviesView {
         progressBar = view.findViewById(R.id.progress_bar);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.movies_fragment_title);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         moviesPresenter.attachView(this);
         moviesPresenter.viewIsReady();
     }
 
+    @Nullable
     @Override
-    public void onStop() {
-        super.onStop();
-        moviesPresenter.detachView();
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        App.getAppComponent().inject(this);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.movies_fragment_title);
+        setHasOptionsMenu(true);
+        return inflater.inflate(R.layout.movies_fragment, container, false);
     }
 
     @Override
@@ -84,14 +81,6 @@ public class MoviesFragment extends Fragment implements MoviesView {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        App.getAppComponent().inject(this);
-        setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.movies_fragment, container, false);
     }
 
     @Override
@@ -125,7 +114,7 @@ public class MoviesFragment extends Fragment implements MoviesView {
     @Override
     public void openMovieDetailFragment(int movieId) {
         Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-        intent.putExtra("movie id", movieId);
+        intent.putExtra(Constant.MOVIE_ID_FIELD, movieId);
         startActivityForResult(intent, REQUEST_CODE);
     }
 
@@ -133,27 +122,29 @@ public class MoviesFragment extends Fragment implements MoviesView {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode != REQUEST_CODE) {
+        if (requestCode != REQUEST_CODE || resultCode != RESULT_OK) {
             return;
         }
 
-        if (resultCode != RESULT_OK) {
-            return;
-        }
-
-        int movie_id = data.getIntExtra(MOVIE_ID, 0);
+        int movie_id = data.getIntExtra(Constant.MOVIE_ID_FIELD, 0);
         moviesPresenter.changeMovieElement(movie_id);
     }
 
     @Override
-    public void updateMovieElement(Movie movie) {
-        movieAdapter.notifyItemChanged(movie.getId());
+    public void updateMovieElement(Movie movie, int position) {
+        movieAdapter.itemChanged(movie, 0);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        moviesPresenter.detachView();
     }
 
     private ClickMovieListener movieListener = new ClickMovieListener() {
         @Override
-        public void clickMovie(int id) {
-            moviesPresenter.selectedMovie(id);
+        public void movieClicked(int id, int position) {
+            moviesPresenter.selectedMovie(id, position);
         }
     };
 }

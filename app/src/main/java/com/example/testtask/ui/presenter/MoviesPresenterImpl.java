@@ -19,10 +19,21 @@ public class MoviesPresenterImpl implements MoviesPresenter {
     private Repository repository;
     private Context context;
     private MoviesView view;
+    private int moviePosition;
 
     public MoviesPresenterImpl(Repository repository, Context context) {
         this.repository = repository;
         this.context = context;
+    }
+
+    @Override
+    public void attachView(MoviesView view) {
+        this.view = view;
+    }
+
+    @Override
+    public void detachView() {
+        view = null;
     }
 
     @Override
@@ -55,24 +66,25 @@ public class MoviesPresenterImpl implements MoviesPresenter {
             repository.downloadMovies(moviesDownloadListener);
         } else {
             view.stopProgress();
-            view.showMessage("Can not download data, check the connection to the Internet");
+            view.showMessage(INTERNET_ERROR);
         }
     }
 
     @Override
-    public void selectedMovie(int movieId) {
+    public void selectedMovie(int movieId, int moviePosition) {
         view.openMovieDetailFragment(repository.getMovie(movieId).getId());
+        this.moviePosition = moviePosition;
     }
 
     @Override
     public void viewIsReady() {
         view.startProgress();
         if (isOnline()) {
-            if (repository.moviesDownloaded()) {
+            if (!repository.moviesDownloaded()) {
+                repository.downloadMovies(moviesDownloadListener);
+            } else {
                 view.showMovies(repository.getMovies());
                 view.stopProgress();
-            } else {
-                repository.downloadMovies(moviesDownloadListener);
             }
         } else {
             if (repository.moviesDownloaded()) {
@@ -88,7 +100,7 @@ public class MoviesPresenterImpl implements MoviesPresenter {
     @Override
     public void changeMovieElement(int movieId) {
         Movie movie = repository.getMovie(movieId);
-        view.updateMovieElement(movie);
+        view.updateMovieElement(movie, moviePosition);
     }
 
     private boolean isOnline() {
@@ -116,16 +128,4 @@ public class MoviesPresenterImpl implements MoviesPresenter {
             view.showMessage(INTERNET_ERROR);
         }
     };
-
-    @Override
-    public void attachView(MoviesView view) {
-        this.view = view;
-    }
-
-    @Override
-    public void detachView() {
-        view = null;
-    }
-
-
 }

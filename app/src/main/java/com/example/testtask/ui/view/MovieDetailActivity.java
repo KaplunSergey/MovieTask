@@ -1,15 +1,10 @@
 package com.example.testtask.ui.view;
 
-import android.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,17 +12,17 @@ import android.widget.TextView;
 import com.example.testtask.App;
 import com.example.testtask.R;
 import com.example.testtask.Utils.StringUtils;
+import com.example.testtask.common.Constant;
 import com.example.testtask.data.database.Movie;
 import com.example.testtask.ui.presenter.MovieDetailPresenter;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
-public class MovieDetailFragment extends Fragment implements MovieDetailView {
+public class MovieDetailActivity extends AppCompatActivity implements MovieDetailView {
 
     private static final String UN_BOOKMARK = "UnBookmark";
     private static final String BOOKMARK = "Bookmark";
-    private static final String MOVIE_ID = "movie id";
 
     @Inject
     MovieDetailPresenter movieDetailPresenter;
@@ -40,64 +35,44 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
     private int movieId;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        movieId = getActivity().getIntent().getIntExtra(MOVIE_ID, 0);
-    }
+        setContentView(R.layout.movie_detail_activity);
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        movieId = getIntent().getIntExtra(Constant.MOVIE_ID_FIELD, 0);
+
         App.getAppComponent().inject(this);
-        ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        ActionBar supportActionBar = getSupportActionBar();
         supportActionBar.setDisplayHomeAsUpEnabled(true);
         supportActionBar.setTitle(R.string.movie_detail_fragment_title);
-        setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.movie_detail_fragment, container, false);
-    }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         movieDetailPresenter.attachView(this);
 
-        movieImage = view.findViewById(R.id.movie_detail_image);
-        movieTitle = view.findViewById(R.id.movie_detail_title);
-        movieRating = view.findViewById(R.id.movie_detail_rating);
-        movieYear = view.findViewById(R.id.movie_detail_year);
-        movieGenre = view.findViewById(R.id.movie_detail_genre);
-        movieBookmarkButton = view.findViewById(R.id.bookmark_button);
+        movieImage = findViewById(R.id.movie_detail_image);
+        movieTitle = findViewById(R.id.movie_detail_title);
+        movieRating = findViewById(R.id.movie_detail_rating);
+        movieYear = findViewById(R.id.movie_detail_year);
+        movieGenre = findViewById(R.id.movie_detail_genre);
+        movieBookmarkButton = findViewById(R.id.bookmark_button);
 
         movieDetailPresenter.setMovieId(movieId);
-        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                movieDetailPresenter.onBack();
-                getActivity().onBackPressed();
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        menu.clear();
-        super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroyView() {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        movieDetailPresenter.detachView();
-        super.onDestroyView();
+    public void onBackPressed() {
+        movieDetailPresenter.onBackPressed();
+        setResult(RESULT_OK, getIntent());
+        finish();
     }
 
     @Override
@@ -106,7 +81,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
     }
 
     @Override
-    public void showMovie(final Movie movie) {
+    public void showMovie(Movie movie) {
         Picasso.get().load(movie.getImageUrl()).fit().into(movieImage);
         movieTitle.setText(movie.getTitle());
         movieRating.setText(String.valueOf(movie.getRating()));

@@ -38,7 +38,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter{
     }
 
     @Override
-    public void onBack() {
+    public void onBackPressed() {
         repository.updateMovieBookmark(movie.getId(), movie.isBookmark());
     }
 }

@@ -10,7 +10,7 @@ public interface MoviesView extends View {
     void startProgress();
     void stopProgress();
     void openMovieDetailFragment(int movieId);
-    void updateMovieElement(Movie movie);
+    void updateMovieElement(Movie model, int position);
 
     enum Sort{
         RATING_UP,
