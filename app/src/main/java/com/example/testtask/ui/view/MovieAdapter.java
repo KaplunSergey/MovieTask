@@ -17,12 +17,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>{
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MoviesViewHolder>{
 
     private List<Movie> movies;
     private ClickMovieListener clickMovieListener;
 
-    MoviesAdapter(List<Movie> movies, ClickMovieListener clickMovieListener) {
+    MovieAdapter(List<Movie> movies, ClickMovieListener clickMovieListener) {
         this.movies = movies;
         this.clickMovieListener = clickMovieListener;
     }

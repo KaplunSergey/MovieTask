@@ -35,17 +35,23 @@ public class DbHelper extends SQLiteOpenHelper implements DbHandler {
     @Override
     public void addMovies(List<Movie> movies) {
         SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
 
-        for (Movie movie : movies) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(MovieTable.COLUMN.TITLE, movie.getTitle());
-            contentValues.put(MovieTable.COLUMN.IMAGE, movie.getImageUrl());
-            contentValues.put(MovieTable.COLUMN.RATING, movie.getRating());
-            contentValues.put(MovieTable.COLUMN.YEAR, movie.getYear());
-            String genre = StringUtils.convertListToString(movie.getGenre());
-            contentValues.put(MovieTable.COLUMN.GENRE, genre);
+        try {
+            for (Movie movie : movies) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(MovieTable.COLUMN.TITLE, movie.getTitle());
+                contentValues.put(MovieTable.COLUMN.IMAGE, movie.getImageUrl());
+                contentValues.put(MovieTable.COLUMN.RATING, movie.getRating());
+                contentValues.put(MovieTable.COLUMN.YEAR, movie.getYear());
+                String genre = StringUtils.convertListToString(movie.getGenre());
+                contentValues.put(MovieTable.COLUMN.GENRE, genre);
 
-            db.insert(MovieTable.TABLE, null, contentValues);
+                db.insert(MovieTable.TABLE, null, contentValues);
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
         }
 
         db.close();
@@ -56,9 +62,9 @@ public class DbHelper extends SQLiteOpenHelper implements DbHandler {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(MovieTable.TABLE, MovieTable.COLUMN.ALL_KEYS, MovieTable.COLUMN.ID + "=?",
-                new String[] { String.valueOf(id) }, null, null, null, null);
+                new String[]{String.valueOf(id)}, null, null, null, null);
 
-        if (cursor != null){
+        if (cursor != null) {
             cursor.moveToFirst();
         }
 
@@ -107,7 +113,7 @@ public class DbHelper extends SQLiteOpenHelper implements DbHandler {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(MovieTable.COLUMN.BOOKMARK, bookmark? 1 : 0);
+        values.put(MovieTable.COLUMN.BOOKMARK, bookmark ? 1 : 0);
 
         db.update(MovieTable.TABLE, values, MovieTable.COLUMN.ID + " = ?",
                 new String[]{String.valueOf(id)});

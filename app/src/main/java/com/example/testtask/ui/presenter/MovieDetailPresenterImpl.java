@@ -1,15 +1,13 @@
 package com.example.testtask.ui.presenter;
 
-import android.support.annotation.NonNull;
-
 import com.example.testtask.data.Repository;
 import com.example.testtask.data.database.Movie;
 import com.example.testtask.ui.view.MovieDetailView;
 
-public class MovieDetailPresenterImpl<V extends MovieDetailView> implements MovieDetailPresenter<V> {
+public class MovieDetailPresenterImpl implements MovieDetailPresenter{
 
     private Repository repository;
-    private V view;
+    private MovieDetailView view;
     private Movie movie;
 
 
@@ -18,14 +16,19 @@ public class MovieDetailPresenterImpl<V extends MovieDetailView> implements Movi
     }
 
     @Override
-    public void attachView(@NonNull V view) {
+    public void setMovieId(int movieId) {
+        movie = repository.getMovie(movieId);
+        view.showMovie(movie);
+    }
+
+    @Override
+    public void attachView(MovieDetailView view) {
         this.view = view;
     }
 
     @Override
-    public void setMovieId(int movieId) {
-        movie = repository.getMovie(movieId);
-        view.showMovie(movie);
+    public void detachView() {
+        view = null;
     }
 
     @Override
@@ -37,10 +40,5 @@ public class MovieDetailPresenterImpl<V extends MovieDetailView> implements Movi
     @Override
     public void onBack() {
         repository.updateMovieBookmark(movie.getId(), movie.isBookmark());
-    }
-
-    @Override
-    public void detachView() {
-        view = null;
     }
 }

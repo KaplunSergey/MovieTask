@@ -1,7 +1,7 @@
 package com.example.testtask.ui.view;
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -20,29 +20,46 @@ import com.example.testtask.App;
 import com.example.testtask.R;
 import com.example.testtask.callback.ClickMovieListener;
 import com.example.testtask.data.database.Movie;
+import com.example.testtask.ui.MovieDetailActivity;
 import com.example.testtask.ui.presenter.MoviesPresenter;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import static android.app.Activity.RESULT_OK;
+
 public class MoviesFragment extends Fragment implements MoviesView {
 
+    private static final int REQUEST_CODE = 1;
+    private static final String MOVIE_ID = "movie id";
     @Inject
     MoviesPresenter moviesPresenter;
 
-    RecyclerView recyclerView;
-    ProgressBar progressBar;
+    private RecyclerView recyclerView;
+    private ProgressBar progressBar;
+    private MovieAdapter movieAdapter;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = getActivity().findViewById(R.id.recycle_view);
-        progressBar = getActivity().findViewById(R.id.progress_bar);
+        recyclerView = view.findViewById(R.id.recycle_view);
+        progressBar = view.findViewById(R.id.progress_bar);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        moviesPresenter.attachView(this);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.movies_fragment_title);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        moviesPresenter.attachView(this);
         moviesPresenter.viewIsReady();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        moviesPresenter.detachView();
     }
 
     @Override
@@ -84,13 +101,8 @@ public class MoviesFragment extends Fragment implements MoviesView {
 
     @Override
     public void showMovies(List<Movie> movies) {
-        MoviesAdapter moviesAdapter = new MoviesAdapter(movies, new ClickMovieListener() {
-            @Override
-            public void clickMovie(int id) {
-                moviesPresenter.selectedMovie(id);
-            }
-        });
-        recyclerView.setAdapter(moviesAdapter);
+        movieAdapter = new MovieAdapter(movies, movieListener);
+        recyclerView.setAdapter(movieAdapter);
     }
 
     @Override
@@ -112,11 +124,36 @@ public class MoviesFragment extends Fragment implements MoviesView {
 
     @Override
     public void openMovieDetailFragment(int movieId) {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
-        movieDetailFragment.setMovieId(movieId);
-        fragmentTransaction.replace(R.id.fragment_container, movieDetailFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+        intent.putExtra("movie id", movieId);
+        startActivityForResult(intent, REQUEST_CODE);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode != REQUEST_CODE) {
+            return;
+        }
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        int movie_id = data.getIntExtra(MOVIE_ID, 0);
+        moviesPresenter.changeMovieElement(movie_id);
+    }
+
+    @Override
+    public void updateMovieElement(Movie movie) {
+        movieAdapter.notifyItemChanged(movie.getId());
+    }
+
+    private ClickMovieListener movieListener = new ClickMovieListener() {
+        @Override
+        public void clickMovie(int id) {
+            moviesPresenter.selectedMovie(id);
+        }
+    };
 }

@@ -3,7 +3,6 @@ package com.example.testtask.ui.presenter;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.annotation.NonNull;
 
 import com.example.testtask.Utils.MovieUtils;
 import com.example.testtask.callback.MoviesDownloadListener;
@@ -14,11 +13,12 @@ import com.example.testtask.ui.view.MoviesView;
 import java.util.Collections;
 import java.util.List;
 
-public class MoviesPresenterImpl<V extends MoviesView> implements MoviesPresenter<V> {
+public class MoviesPresenterImpl implements MoviesPresenter {
 
+    private static final String INTERNET_ERROR = "Can not download data, check the connection to the Internet";
     private Repository repository;
     private Context context;
-    private V view;
+    private MoviesView view;
 
     public MoviesPresenterImpl(Repository repository, Context context) {
         this.repository = repository;
@@ -26,17 +26,7 @@ public class MoviesPresenterImpl<V extends MoviesView> implements MoviesPresente
     }
 
     @Override
-    public void attachView(@NonNull V view) {
-        this.view = view;
-    }
-
-    @Override
-    public void detachView() {
-        view = null;
-    }
-
-    @Override
-    public void sortMovies(V.Sort sort) {
+    public void sortMovies(MoviesView.Sort sort) {
 
         List<Movie> movies = repository.getMovies();
 
@@ -89,10 +79,16 @@ public class MoviesPresenterImpl<V extends MoviesView> implements MoviesPresente
                 view.showMovies(repository.getMovies());
                 view.stopProgress();
             } else {
-                view.showMessage("Can not download data, check the connection to the Internet");
+                view.showMessage(INTERNET_ERROR);
                 view.stopProgress();
             }
         }
+    }
+
+    @Override
+    public void changeMovieElement(int movieId) {
+        Movie movie = repository.getMovie(movieId);
+        view.updateMovieElement(movie);
     }
 
     private boolean isOnline() {
@@ -117,7 +113,19 @@ public class MoviesPresenterImpl<V extends MoviesView> implements MoviesPresente
 
         @Override
         public void loadingError(Throwable t) {
-            view.showMessage(t.getMessage());
+            view.showMessage(INTERNET_ERROR);
         }
     };
+
+    @Override
+    public void attachView(MoviesView view) {
+        this.view = view;
+    }
+
+    @Override
+    public void detachView() {
+        view = null;
+    }
+
+
 }

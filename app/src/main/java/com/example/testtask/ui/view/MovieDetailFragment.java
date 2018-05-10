@@ -1,6 +1,5 @@
 package com.example.testtask.ui.view;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,19 +27,22 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
 
     private static final String UN_BOOKMARK = "UnBookmark";
     private static final String BOOKMARK = "Bookmark";
+    private static final String MOVIE_ID = "movie id";
+
     @Inject
     MovieDetailPresenter movieDetailPresenter;
-    ImageView movieImage;
-    TextView movieTitle;
-    TextView movieRating;
-    TextView movieYear;
-    TextView movieGenre;
-    Button movieBookmarkButton;
-    int movieId;
+    private ImageView movieImage;
+    private TextView movieTitle;
+    private TextView movieRating;
+    private TextView movieYear;
+    private TextView movieGenre;
+    private Button movieBookmarkButton;
+    private int movieId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        movieId = getActivity().getIntent().getIntExtra(MOVIE_ID, 0);
     }
 
     @Nullable
@@ -58,13 +60,12 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         movieDetailPresenter.attachView(this);
 
-        Activity activity = getActivity();
-        movieImage = activity.findViewById(R.id.movie_detail_image);
-        movieTitle = activity.findViewById(R.id.movie_detail_title);
-        movieRating = activity.findViewById(R.id.movie_detail_rating);
-        movieYear = activity.findViewById(R.id.movie_detail_year);
-        movieGenre = activity.findViewById(R.id.movie_detail_genre);
-        movieBookmarkButton = activity.findViewById(R.id.bookmark_button);
+        movieImage = view.findViewById(R.id.movie_detail_image);
+        movieTitle = view.findViewById(R.id.movie_detail_title);
+        movieRating = view.findViewById(R.id.movie_detail_rating);
+        movieYear = view.findViewById(R.id.movie_detail_year);
+        movieGenre = view.findViewById(R.id.movie_detail_genre);
+        movieBookmarkButton = view.findViewById(R.id.bookmark_button);
 
         movieDetailPresenter.setMovieId(movieId);
         super.onViewCreated(view, savedInstanceState);
@@ -74,7 +75,8 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                getFragmentManager().popBackStack();
+                movieDetailPresenter.onBack();
+                getActivity().onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -87,16 +89,15 @@ public class MovieDetailFragment extends Fragment implements MovieDetailView {
     }
 
     @Override
-    public void onDestroyView() {
-        movieDetailPresenter.onBack();
-        movieDetailPresenter.detachView();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        super.onDestroyView();
+    public void onStop() {
+        super.onStop();
     }
 
     @Override
-    public void setMovieId(int movieId) {
-        this.movieId = movieId;
+    public void onDestroyView() {
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        movieDetailPresenter.detachView();
+        super.onDestroyView();
     }
 
     @Override
