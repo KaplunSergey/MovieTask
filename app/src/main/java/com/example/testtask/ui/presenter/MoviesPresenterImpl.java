@@ -19,6 +19,8 @@ public class MoviesPresenterImpl implements MoviesPresenter {
     private Repository repository;
     private Context context;
     private MoviesView view;
+
+    // TODO: 12.05.2018 WTF ?
     private int moviePosition;
 
     public MoviesPresenterImpl(Repository repository, Context context) {
@@ -33,6 +35,7 @@ public class MoviesPresenterImpl implements MoviesPresenter {
 
     @Override
     public void detachView() {
+        // TODO: 12.05.2018 where is cancelling request ?
         view = null;
     }
 
@@ -73,12 +76,14 @@ public class MoviesPresenterImpl implements MoviesPresenter {
     @Override
     public void selectedMovie(int movieId, int moviePosition) {
         view.openMovieDetailFragment(repository.getMovie(movieId).getId());
+        // TODO: 12.05.2018 wrong
         this.moviePosition = moviePosition;
     }
 
     @Override
     public void viewIsReady() {
         view.startProgress();
+        // TODO: 12.05.2018 completely wrong flow
         if (isOnline()) {
             if (!repository.moviesDownloaded()) {
                 repository.downloadMovies(moviesDownloadListener);
@@ -100,10 +105,12 @@ public class MoviesPresenterImpl implements MoviesPresenter {
     @Override
     public void changeMovieElement(int movieId) {
         Movie movie = repository.getMovie(movieId);
+        // TODO: 12.05.2018 moviePosition ??
         view.updateMovieElement(movie, moviePosition);
     }
 
     private boolean isOnline() {
+        // TODO: 12.05.2018 should be in net utils
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = connectivityManager.getActiveNetworkInfo();
@@ -119,6 +126,8 @@ public class MoviesPresenterImpl implements MoviesPresenter {
             }
             repository.saveMovies(movies);
             List<Movie> dbMovies = repository.getMovies();
+
+            // TODO: 12.05.2018 nullPointer after detach
             view.showMovies(dbMovies);
             view.stopProgress();
         }

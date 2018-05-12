@@ -41,15 +41,22 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MoviesViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MoviesViewHolder holder, final int position) {
+
+
         Picasso.get().load(movies.get(position).getImageUrl()).fit().into(holder.movieImage);
         holder.movieTitle.setText(movies.get(position).getTitle());
+
+        // TODO: 12.05.2018 double 1
         holder.movieBookmark.setChecked(movies.get(position).isBookmark());
+
+        // TODO: 12.05.2018 itemView .setOnClickListener is better
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 clickMovieListener.movieClicked(movies.get(position).getId(), position);
             }
         });
+        // TODO: 12.05.2018 double 2
         holder.movieBookmark.setChecked(movies.get(position).isBookmark());
     }
 
@@ -68,6 +75,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MoviesViewHo
         ImageView movieImage;
         TextView movieTitle;
         CheckBox movieBookmark;
+
+        // TODO: 12.05.2018 bind(Movie movie)
 
         MoviesViewHolder(View itemView) {
             super(itemView);

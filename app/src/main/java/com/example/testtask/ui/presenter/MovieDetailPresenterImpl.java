@@ -39,6 +39,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter{
 
     @Override
     public void onBackPressed() {
+        // TODO: 12.05.2018 completely wrong ! what if I drop the app ?
         repository.updateMovieBookmark(movie.getId(), movie.isBookmark());
     }
 }

@@ -45,6 +45,7 @@ public class MoviesFragment extends Fragment implements MoviesView {
         recyclerView = view.findViewById(R.id.recycle_view);
         progressBar = view.findViewById(R.id.progress_bar);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        // TODO: 12.05.2018 nullPointer
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.movies_fragment_title);
         moviesPresenter.attachView(this);
         moviesPresenter.viewIsReady();
@@ -53,6 +54,7 @@ public class MoviesFragment extends Fragment implements MoviesView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        // TODO: 12.05.2018 should be in onAttach
         App.getAppComponent().inject(this);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.movies_fragment_title);
         setHasOptionsMenu(true);
@@ -67,6 +69,7 @@ public class MoviesFragment extends Fragment implements MoviesView {
                 moviesPresenter.updateMovies();
                 break;
             case R.id.rating_up:
+                // TODO: 12.05.2018 without sending sort flag
                 moviesPresenter.sortMovies(Sort.RATING_UP);
                 break;
             case R.id.rating_down:
@@ -90,6 +93,7 @@ public class MoviesFragment extends Fragment implements MoviesView {
 
     @Override
     public void showMovies(List<Movie> movies) {
+        // TODO: 12.05.2018 new adapter is bad ! where dynamic ? pagination issue ?
         movieAdapter = new MovieAdapter(movies, movieListener);
         recyclerView.setAdapter(movieAdapter);
     }
@@ -101,6 +105,7 @@ public class MoviesFragment extends Fragment implements MoviesView {
 
     @Override
     public void startProgress() {
+        // TODO: 12.05.2018  recyclerView.alpha is better
         recyclerView.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
     }
@@ -113,6 +118,7 @@ public class MoviesFragment extends Fragment implements MoviesView {
 
     @Override
     public void openMovieDetailFragment(int movieId) {
+        // TODO: 12.05.2018 method naming : openMovie is enough
         Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
         intent.putExtra(Constant.MOVIE_ID_FIELD, movieId);
         startActivityForResult(intent, REQUEST_CODE);
@@ -127,11 +133,13 @@ public class MoviesFragment extends Fragment implements MoviesView {
         }
 
         int movie_id = data.getIntExtra(Constant.MOVIE_ID_FIELD, 0);
+
         moviesPresenter.changeMovieElement(movie_id);
     }
 
     @Override
     public void updateMovieElement(Movie movie, int position) {
+        // TODO: 12.05.2018 everytime position is 0 ????
         movieAdapter.itemChanged(movie, 0);
     }
 

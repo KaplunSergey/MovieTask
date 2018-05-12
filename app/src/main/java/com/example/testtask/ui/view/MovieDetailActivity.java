@@ -43,9 +43,11 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
         App.getAppComponent().inject(this);
         ActionBar supportActionBar = getSupportActionBar();
+        // TODO: 12.05.2018 nullPointer
         supportActionBar.setDisplayHomeAsUpEnabled(true);
         supportActionBar.setTitle(R.string.movie_detail_fragment_title);
 
+        // TODO: 12.05.2018 attach after find
         movieDetailPresenter.attachView(this);
 
         movieImage = findViewById(R.id.movie_detail_image);
@@ -76,6 +78,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     }
 
     @Override
+    // TODO: 12.05.2018 double 1
     public void updateBookmarkButton(boolean bookmark) {
         changeBookmarkButtonText(bookmark);
     }
@@ -97,7 +100,9 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         });
     }
 
+    // TODO: 12.05.2018 double 2
     private void changeBookmarkButtonText(boolean bookmark) {
+        // TODO: 12.05.2018 ? :
         if (bookmark) {
             movieBookmarkButton.setText(UN_BOOKMARK);
         } else {
