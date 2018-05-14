@@ -1,42 +1,50 @@
 package com.example.testtask.data.database;
 
+import com.example.testtask.data.database.movie.MovieDb;
+import com.example.testtask.data.database.movie.MovieDAO;
+
 import java.util.List;
 
 public class StorageImpl implements Storage {
 
-    private DbHelper dbHelper;
+    private MovieDAO movieDAO;
 
-    public StorageImpl(DbHelper dbHelper) {
-        this.dbHelper = dbHelper;
+    public StorageImpl(MovieDAO movieDAO) {
+        this.movieDAO = movieDAO;
     }
 
     @Override
-    public void addMovies(List<Movie> movies) {
-        dbHelper.addMovies(movies);
+    public void addMovies(List<MovieDb> movies) {
+        movieDAO.addMovies(movies);
     }
 
     @Override
-    public Movie getMovie(int id) {
-        return dbHelper.getMovie(id);
+    public MovieDb getMovie(int id) {
+        return movieDAO.getMovie(id);
     }
 
     @Override
-    public List<Movie> getMovies() {
-        return dbHelper.getMovies();
+    public List<MovieDb> getMovies() {
+        return movieDAO.getMovies();
     }
 
     @Override
     public void updateMoviesBookmark(int id, boolean bookmark) {
-        dbHelper.updateMovieBookmark(id, bookmark);
+        movieDAO.updateMovieBookmark(id, bookmark);
     }
 
     @Override
     public boolean moviesDownloaded() {
-        return dbHelper.moviesDownloaded();
+        return movieDAO.moviesDownloaded();
     }
 
     @Override
     public void deleteMovies() {
-        dbHelper.deleteMovies();
+        movieDAO.deleteMovies();
+    }
+
+    @Override
+    public void close() {
+        movieDAO.closeDb();
     }
 }

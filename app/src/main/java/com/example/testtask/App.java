@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.example.testtask.di.component.AppComponent;
 import com.example.testtask.di.component.DaggerAppComponent;
-import com.example.testtask.di.module.AppModule;
 
 public class App extends Application{
 
@@ -15,7 +14,7 @@ public class App extends Application{
         super.onCreate();
 
         appComponent = DaggerAppComponent.builder()
-                .appModule(new AppModule(this))
+                .application(this)
                 .build();
     }
 

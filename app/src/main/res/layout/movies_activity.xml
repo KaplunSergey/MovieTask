@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.view.MoviesActivity">
+    tools:context=".ui.mainView.view.MoviesActivity">
 
     <fragment
-        android:name="com.example.testtask.ui.view.MoviesFragment"
+        android:name="com.example.testtask.ui.mainView.view.MoviesFragment"
         android:id="@+id/fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

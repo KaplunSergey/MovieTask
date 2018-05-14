@@ -1,9 +1,11 @@
-package com.example.testtask.ui.view;
+package com.example.testtask.ui.mainView.view;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,10 +20,11 @@ import android.widget.Toast;
 
 import com.example.testtask.App;
 import com.example.testtask.R;
-import com.example.testtask.callback.ClickMovieListener;
+import com.example.testtask.ui.mainView.callback.ClickMovieListener;
 import com.example.testtask.common.Constant;
-import com.example.testtask.data.database.Movie;
-import com.example.testtask.ui.presenter.MoviesPresenter;
+import com.example.testtask.data.base.Movie;
+import com.example.testtask.ui.detailView.view.MovieDetailActivity;
+import com.example.testtask.ui.mainView.presenter.MoviesPresenter;
 
 import java.util.List;
 
@@ -32,6 +35,8 @@ import static android.app.Activity.RESULT_OK;
 public class MoviesFragment extends Fragment implements MoviesView {
 
     private static final int REQUEST_CODE = 1;
+    private static final float APPLY_ALPHA = 0.2f;
+    private static final float CANCEL_ALPHA = 1.0f;
 
     @Inject
     MoviesPresenter moviesPresenter;
@@ -40,13 +45,33 @@ public class MoviesFragment extends Fragment implements MoviesView {
     private MovieAdapter movieAdapter;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        movieAdapter = new MovieAdapter(movieListener);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setTitle(R.string.movies_fragment_title);
+        }
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recycle_view);
         progressBar = view.findViewById(R.id.progress_bar);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        // TODO: 12.05.2018 nullPointer
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.movies_fragment_title);
+        recyclerView.setAdapter(movieAdapter);
+
+        ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setTitle(R.string.movies_fragment_title);
+        }
         moviesPresenter.attachView(this);
         moviesPresenter.viewIsReady();
     }
@@ -54,10 +79,7 @@ public class MoviesFragment extends Fragment implements MoviesView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        // TODO: 12.05.2018 should be in onAttach
         App.getAppComponent().inject(this);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.movies_fragment_title);
-        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.movies_fragment, container, false);
     }
 
@@ -69,17 +91,16 @@ public class MoviesFragment extends Fragment implements MoviesView {
                 moviesPresenter.updateMovies();
                 break;
             case R.id.rating_up:
-                // TODO: 12.05.2018 without sending sort flag
-                moviesPresenter.sortMovies(Sort.RATING_UP);
-                break;
+                moviesPresenter.sortMoviesRatingUp();
+            break;
             case R.id.rating_down:
-                moviesPresenter.sortMovies(Sort.RATING_DOWN);
+                moviesPresenter.sortMoviesRatingDown();
                 break;
             case R.id.year_up:
-                moviesPresenter.sortMovies(Sort.YEAR_UP);
+                moviesPresenter.sortMoviesYearUp();
                 break;
             case R.id.year_down:
-                moviesPresenter.sortMovies(Sort.YEAR_DOWN);
+                moviesPresenter.sortMoviesYearDown();
                 break;
         }
 
@@ -93,9 +114,7 @@ public class MoviesFragment extends Fragment implements MoviesView {
 
     @Override
     public void showMovies(List<Movie> movies) {
-        // TODO: 12.05.2018 new adapter is bad ! where dynamic ? pagination issue ?
-        movieAdapter = new MovieAdapter(movies, movieListener);
-        recyclerView.setAdapter(movieAdapter);
+        movieAdapter.setMovies(movies);
     }
 
     @Override
@@ -105,20 +124,18 @@ public class MoviesFragment extends Fragment implements MoviesView {
 
     @Override
     public void startProgress() {
-        // TODO: 12.05.2018  recyclerView.alpha is better
-        recyclerView.setVisibility(View.INVISIBLE);
+        recyclerView.setAlpha(APPLY_ALPHA);
         progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void stopProgress() {
+        recyclerView.setAlpha(CANCEL_ALPHA);
         progressBar.setVisibility(View.INVISIBLE);
-        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void openMovieDetailFragment(int movieId) {
-        // TODO: 12.05.2018 method naming : openMovie is enough
+    public void openMovie(int movieId) {
         Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
         intent.putExtra(Constant.MOVIE_ID_FIELD, movieId);
         startActivityForResult(intent, REQUEST_CODE);
@@ -133,14 +150,32 @@ public class MoviesFragment extends Fragment implements MoviesView {
         }
 
         int movie_id = data.getIntExtra(Constant.MOVIE_ID_FIELD, 0);
-
         moviesPresenter.changeMovieElement(movie_id);
     }
 
     @Override
-    public void updateMovieElement(Movie movie, int position) {
-        // TODO: 12.05.2018 everytime position is 0 ????
-        movieAdapter.itemChanged(movie, 0);
+    public void updateMovieElement(Movie movie) {
+        movieAdapter.itemChanged(movie);
+    }
+
+    @Override
+    public void sortMoviesRatingUp() {
+        movieAdapter.sortMoviesRatingUp();
+    }
+
+    @Override
+    public void sortMoviesRatingDown() {
+        movieAdapter.sortMoviesRatingDown();
+    }
+
+    @Override
+    public void sortMoviesYearUp() {
+        movieAdapter.sortMoviesYearUp();
+    }
+
+    @Override
+    public void sortMoviesYearDown() {
+        movieAdapter.sortMoviesYearDown();
     }
 
     @Override
@@ -151,8 +186,8 @@ public class MoviesFragment extends Fragment implements MoviesView {
 
     private ClickMovieListener movieListener = new ClickMovieListener() {
         @Override
-        public void movieClicked(int id, int position) {
-            moviesPresenter.selectedMovie(id, position);
+        public void movieClicked(int id) {
+            moviesPresenter.selectedMovie(id);
         }
     };
 }

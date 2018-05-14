@@ -1,8 +1,8 @@
 package com.example.testtask.data.network;
 
-import com.example.testtask.callback.MoviesDownloadListener;
+import com.example.testtask.data.network.callback.MovieDownloadListener;
 
 public interface Network {
-
-    void downloadMovies(MoviesDownloadListener moviesDownloadListener);
+    void downloadMovies(MovieDownloadListener movieDownloadListener);
+    void close();
 }

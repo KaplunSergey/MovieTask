@@ -1,13 +1,12 @@
 package com.example.testtask.di.module;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.example.testtask.data.Repository;
-import com.example.testtask.ui.presenter.MovieDetailPresenter;
-import com.example.testtask.ui.presenter.MovieDetailPresenterImpl;
-import com.example.testtask.ui.presenter.MoviesPresenter;
-import com.example.testtask.ui.presenter.MoviesPresenterImpl;
+import com.example.testtask.data.base.Repository;
+import com.example.testtask.ui.detailView.presenter.MovieDetailPresenter;
+import com.example.testtask.ui.detailView.presenter.MovieDetailPresenterImpl;
+import com.example.testtask.ui.mainView.presenter.MoviesPresenter;
+import com.example.testtask.ui.mainView.presenter.MoviesPresenterImpl;
 
 import dagger.Module;
 import dagger.Provides;
@@ -22,7 +21,7 @@ public class PresenterModule {
 
     @Provides
     @NonNull
-    MoviesPresenter provideMoviesPresenter(Repository repository, Context context) {
-        return new MoviesPresenterImpl(repository, context);
+    MoviesPresenter provideMoviesPresenter(Repository repository) {
+        return new MoviesPresenterImpl(repository);
     }
 }

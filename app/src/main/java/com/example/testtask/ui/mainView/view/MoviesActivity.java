@@ -1,4 +1,4 @@
-package com.example.testtask.ui.view;
+package com.example.testtask.ui.mainView.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

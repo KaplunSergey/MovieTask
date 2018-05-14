@@ -1,10 +1,10 @@
-package com.example.testtask.data.network;
+package com.example.testtask.data.network.movie;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class MovieModel {
+public class MovieNet {
 
     @SerializedName("title")
     private String title;

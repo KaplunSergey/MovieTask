@@ -1,9 +1,11 @@
 package com.example.testtask.data.network;
 
-import com.example.testtask.callback.MoviesDownloadListener;
-import com.example.testtask.data.database.Movie;
+import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
+import com.example.testtask.data.network.callback.MovieDownloadListener;
+import com.example.testtask.data.network.movie.MovieApi;
+import com.example.testtask.data.network.movie.MovieNet;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -13,41 +15,41 @@ import retrofit2.Retrofit;
 
 public class NetworkImpl implements Network {
 
-    private Retrofit retrofit;
+    private Call<List<MovieNet>> getMoviesCall;
 
     public NetworkImpl(Retrofit retrofit) {
-        this.retrofit = retrofit;
+        MovieApi movieApi = retrofit.create(MovieApi.class);
+        getMoviesCall = movieApi.getMovies();
     }
 
     @Override
-    public void downloadMovies(final MoviesDownloadListener moviesDownloadListener) {
+    public void downloadMovies(final MovieDownloadListener movieDownloadListener) {
+        if (getMoviesCall.isExecuted()) {
+            getMoviesCall.cancel();
+        }
 
-        MovieApi moviesApi = retrofit.create(MovieApi.class);
-        Call<List<MovieModel>> call = moviesApi.getMovies();
+        if (getMoviesCall.isCanceled()) {
+            getMoviesCall = getMoviesCall.clone();
+        }
 
-        call.enqueue(new Callback<List<MovieModel>>() {
+        getMoviesCall.enqueue(new Callback<List<MovieNet>>() {
             @Override
-            public void onResponse(Call<List<MovieModel>> call, Response<List<MovieModel>> response) {
-
-                List<Movie> movies = new ArrayList<>();
-
-                for (MovieModel model : response.body()) {
-                    Movie movie = new Movie();
-                    movie.setGenre(model.getGenre());
-                    movie.setImageUrl(model.getImage());
-                    movie.setRating(model.getRating());
-                    movie.setTitle(model.getTitle());
-                    movie.setYear(model.getReleaseYear());
-                    movies.add(movie);
-                }
-
-                moviesDownloadListener.moviesDownloaded(movies);
+            public void onResponse(@NonNull Call<List<MovieNet>> call, @NonNull Response<List<MovieNet>> response) {
+                List<MovieNet> movies = response.body();
+                movieDownloadListener.moviesDownloaded(movies);
             }
 
             @Override
-            public void onFailure(Call<List<MovieModel>> call, Throwable t) {
-                moviesDownloadListener.loadingError(t);
+            public void onFailure(@NonNull Call<List<MovieNet>> call, @NonNull Throwable t) {
+                movieDownloadListener.loadingError(t);
             }
         });
+    }
+
+    @Override
+    public void close() {
+        if (getMoviesCall != null) {
+            getMoviesCall.cancel();
+        }
     }
 }

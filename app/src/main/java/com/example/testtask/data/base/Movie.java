@@ -1,6 +1,7 @@
-package com.example.testtask.data.database;
+package com.example.testtask.data.base;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Movie {
     private int id;
@@ -65,5 +66,23 @@ public class Movie {
 
     public void setBookmark(boolean bookmark) {
         this.bookmark = bookmark;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movie movie = (Movie) o;
+        return id == movie.id &&
+                Float.compare(movie.rating, rating) == 0 &&
+                year == movie.year &&
+                Objects.equals(title, movie.title) &&
+                Objects.equals(imageUrl, movie.imageUrl) &&
+                Objects.equals(genre, movie.genre);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, imageUrl, rating, year, genre);
     }
 }
