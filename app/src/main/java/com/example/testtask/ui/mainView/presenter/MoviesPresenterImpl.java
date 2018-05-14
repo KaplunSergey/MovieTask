@@ -24,8 +24,8 @@ public class MoviesPresenterImpl implements MoviesPresenter {
 
     @Override
     public void detachView() {
-        view = null;
         repository.close();
+        view = null;
     }
 
     @Override

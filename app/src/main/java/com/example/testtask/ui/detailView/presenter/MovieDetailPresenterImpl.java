@@ -16,6 +16,16 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     }
 
     @Override
+    public void attachView(MovieDetailView view) {
+        this.view = view;
+    }
+
+    @Override
+    public void detachView() {
+        view = null;
+    }
+
+    @Override
     public void detailViewIsReady(int movieId) {
         try {
             movie = repository.getMovie(movieId);
@@ -24,16 +34,6 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
             return;
         }
         view.showMovie(movie);
-    }
-
-    @Override
-    public void attachView(MovieDetailView view) {
-        this.view = view;
-    }
-
-    @Override
-    public void detachView() {
-        view = null;
     }
 
     @Override
