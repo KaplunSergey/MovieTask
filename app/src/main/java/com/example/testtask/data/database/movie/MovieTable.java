@@ -4,6 +4,9 @@ public interface MovieTable {
     String TABLE = "movies";
 
     interface COLUMN {
+        /**
+         * Why _id with _ symbol ? (just a question)
+         */
         String ID = "_id";
         String TITLE = "title";
         String IMAGE = "image";

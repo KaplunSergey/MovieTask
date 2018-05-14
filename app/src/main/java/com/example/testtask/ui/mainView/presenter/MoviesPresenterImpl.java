@@ -57,12 +57,22 @@ public class MoviesPresenterImpl implements MoviesPresenter {
     @Override
     public void selectedMovie(int movieId) {
         Movie movie;
+
+        /**
+         * no any try/catch better to have callback
+         */
+
         try {
             movie = repository.getMovie(movieId);
         } catch (RepositoryException e) {
             view.showMessage(e.getMessage());
             return;
         }
+
+        /**
+         * because it could be async operation
+         */
+
         view.openMovie(movie.getId());
     }
 
@@ -75,6 +85,11 @@ public class MoviesPresenterImpl implements MoviesPresenter {
     @Override
     public void changeMovieElement(int movieId) {
         Movie movie;
+
+        /**
+         * same issue as with selectedMovie
+         */
+
         try {
             movie = repository.getMovie(movieId);
         } catch (RepositoryException e) {
@@ -84,6 +99,13 @@ public class MoviesPresenterImpl implements MoviesPresenter {
         view.updateMovieElement(movie);
     }
 
+    /**
+     * Of course it is better to have RxJava and CompositeDisposable to unSubscribe from data
+     *
+     * in Detach for example
+     *
+     * instead of check for null on view
+     */
 
     private MovieListener movieListener = new MovieListener() {
         @Override

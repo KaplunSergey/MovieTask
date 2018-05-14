@@ -158,6 +158,14 @@ public class MoviesFragment extends Fragment implements MoviesView {
         movieAdapter.itemChanged(movie);
     }
 
+    /**
+     * Don't think that adapter should sort
+     *
+     * should sort presenter
+     *
+     * and adapter should get new list and update
+     */
+
     @Override
     public void sortMoviesRatingUp() {
         movieAdapter.sortMoviesRatingUp();

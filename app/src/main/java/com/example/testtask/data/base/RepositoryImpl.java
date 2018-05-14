@@ -17,6 +17,11 @@ import java.util.List;
 
 public class RepositoryImpl implements Repository {
 
+    /**
+     * It's better to have enum with error codes and simple description
+     *
+     * Look for enum with parameters
+     */
     private static final String LOADING_ERROR = "Could not download data";
     private static final String NETWORK_ERROR = "Can not download data, check the connection to the Internet";
     private static final String MODEL_NOT_FOUND = "Model not found";
@@ -24,8 +29,10 @@ public class RepositoryImpl implements Repository {
 
     private Network network;
     private Storage storage;
+    // NetworkUtils networkUtils
     private Context context;
 
+    // + networkUtils
     public RepositoryImpl(Network network, Storage storage, Context context) {
         this.network = network;
         this.storage = storage;
@@ -39,6 +46,11 @@ public class RepositoryImpl implements Repository {
             return;
         }
 
+        /**
+         * networkUtils.isConnected()
+         *
+         * without context
+         */
         if (NetworkUtils.getState(context) == NetworkInfo.State.CONNECTED) {
             downloadMoviesByNetwork(listener);
             return;
@@ -97,10 +109,16 @@ public class RepositoryImpl implements Repository {
     public void close() {
         storage.close();
         network.close();
+        // or
+        network.close(Network.ReqId.GET_MOVIES);
     }
 
     private void downloadMoviesByStorage(MovieListener listener) {
         List<MovieDb> movies = storage.getMovies();
+
+        /**
+         * getMovies could not be NULL !
+         */
 
         if (movies == null) {
             listener.error(new RepositoryException(MODELS_NOT_FOUND));

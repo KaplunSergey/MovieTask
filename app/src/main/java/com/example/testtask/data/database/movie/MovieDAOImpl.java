@@ -75,17 +75,20 @@ public class MovieDAOImpl implements MovieDAO {
 
     @Override
     public boolean moviesDownloaded() {
-        Cursor cursor = db.rawQuery(MovieTable.SELECT_MOVIES_COUNT, null);
 
-        if (cursor == null || !cursor.moveToFirst()) {
-            return false;
+        /**
+         * Cursor extends AutoCloseable
+         * that is why you can use (try with resources) and don't mind about close cursor.
+         * it will be closed automatically
+         */
+
+        try(Cursor cursor = db.rawQuery(MovieTable.SELECT_MOVIES_COUNT, null)) {
+            if (cursor == null || !cursor.moveToFirst()) {
+                return false;
+            }
+            int rawCount = cursor.getInt(0);
+            return rawCount > 0;
         }
-
-        int rawCount = cursor.getInt(0);
-        boolean moviesDownloaded = rawCount > 0;
-        cursor.close();
-
-        return moviesDownloaded;
     }
 
     @Override
