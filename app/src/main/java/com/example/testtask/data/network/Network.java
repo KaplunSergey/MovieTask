@@ -1,10 +1,13 @@
 package com.example.testtask.data.network;
 
-import com.example.testtask.data.network.callback.MovieDownloadListener;
+import com.example.testtask.data.network.callback.MovieNetDownloadListener;
 
 public interface Network {
-    void downloadMovies(MovieDownloadListener movieDownloadListener);
+
+    void downloadMovies(MovieNetDownloadListener movieNetDownloadListener);
+
     void close(ReqId id);
+
     void close();
 
     enum ReqId {

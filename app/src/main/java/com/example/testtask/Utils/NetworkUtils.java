@@ -6,7 +6,13 @@ import android.net.NetworkInfo;
 
 public class NetworkUtils {
 
-    public static NetworkInfo.State getState(Context context) {
+    private Context context;
+
+    public NetworkUtils(Context context) {
+        this.context = context;
+    }
+
+    public NetworkInfo.State getNetworkState() {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 

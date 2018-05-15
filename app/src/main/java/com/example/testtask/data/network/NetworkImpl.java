@@ -2,7 +2,7 @@ package com.example.testtask.data.network;
 
 import android.support.annotation.NonNull;
 
-import com.example.testtask.data.network.callback.MovieDownloadListener;
+import com.example.testtask.data.network.callback.MovieNetDownloadListener;
 import com.example.testtask.data.network.movie.MovieApi;
 import com.example.testtask.data.network.movie.MovieNet;
 
@@ -28,7 +28,7 @@ public class NetworkImpl implements Network {
     }
 
     @Override
-    public void downloadMovies(final MovieDownloadListener movieDownloadListener) {
+    public void downloadMovies(final MovieNetDownloadListener movieNetDownloadListener) {
         close(ReqId.GET_MOVIES);
         /**
          * better to create new call in method
@@ -41,13 +41,13 @@ public class NetworkImpl implements Network {
             @Override
             public void onResponse(@NonNull Call<List<MovieNet>> call, @NonNull Response<List<MovieNet>> response) {
                 List<MovieNet> movies = response.body();
-                movieDownloadListener.moviesDownloaded(movies);
+                movieNetDownloadListener.moviesDownloaded(movies);
                 calls.remove(ReqId.GET_MOVIES);
             }
 
             @Override
             public void onFailure(@NonNull Call<List<MovieNet>> call, @NonNull Throwable t) {
-                movieDownloadListener.loadingError(t);
+                movieNetDownloadListener.loadingError(t);
                 calls.remove(ReqId.GET_MOVIES);
             }
         });

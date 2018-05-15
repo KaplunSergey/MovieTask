@@ -75,42 +75,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MoviesViewHo
         notifyDataSetChanged();
     }
 
-    public void sortMoviesRatingUp() {
-        sortMovies(Sort.RATING_UP);
-    }
-
-    public void sortMoviesRatingDown() {
-        sortMovies(Sort.RATING_DOWN);
-    }
-
-    public void sortMoviesYearUp() {
-        sortMovies(Sort.YEAR_UP);
-    }
-
-    public void sortMoviesYearDown() {
-        sortMovies(Sort.YEAR_DOWN);
-    }
-
-    private void sortMovies(Sort sort) {
-
-        switch (sort) {
-            case RATING_UP:
-                Collections.sort(movies, Collections.reverseOrder(MovieUtils.COMPARE_BY_RATING));
-                break;
-            case YEAR_UP:
-                Collections.sort(movies, Collections.reverseOrder(MovieUtils.COMPARE_BY_YEAR));
-                break;
-            case RATING_DOWN:
-                Collections.sort(movies, MovieUtils.COMPARE_BY_RATING);
-                break;
-            case YEAR_DOWN:
-                Collections.sort(movies, MovieUtils.COMPARE_BY_YEAR);
-                break;
-        }
-
-        notifyDataSetChanged();
-    }
-
     @Override
     public int getItemCount() {
         return movies.size();
@@ -135,12 +99,5 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MoviesViewHo
             movieTitle.setText(movie.getTitle());
             movieBookmark.setChecked(movie.isBookmark());
         }
-    }
-
-    private enum Sort {
-        RATING_UP,
-        RATING_DOWN,
-        YEAR_UP,
-        YEAR_DOWN
     }
 }

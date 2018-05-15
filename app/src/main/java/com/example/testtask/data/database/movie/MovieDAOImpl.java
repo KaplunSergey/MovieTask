@@ -43,45 +43,37 @@ public class MovieDAOImpl implements MovieDAO {
 
     @Override
     public MovieDb getMovie(long id) {
-        Cursor cursor = db.rawQuery(MovieTable.SELECT_MOVIE, new String[]{String.valueOf(id)});
+        try (Cursor cursor = db.rawQuery(MovieTable.SELECT_MOVIE, new String[]{String.valueOf(id)})) {
 
-        if (cursor == null || !cursor.moveToFirst()) {
-            return null;
+            if (cursor == null || !cursor.moveToFirst()) {
+                return null;
+            }
+
+            return MovieUtils.getMovieByCursor(cursor);
         }
-
-        MovieDb movieDb = MovieUtils.getMovieByCursor(cursor);
-        cursor.close();
-
-        return movieDb;
     }
 
     @Override
     public List<MovieDb> getMovies() {
         List<MovieDb> movies = new ArrayList<>();
-        Cursor cursor = db.rawQuery(MovieTable.SELECT_MOVIES, null);
 
-        if (cursor == null || !cursor.moveToFirst()) {
-            return null;
+        try(Cursor cursor = db.rawQuery(MovieTable.SELECT_MOVIES, null)) {
+
+            if (cursor == null || !cursor.moveToFirst()) {
+                return null;
+            }
+
+            do {
+                MovieDb movieDb = MovieUtils.getMovieByCursor(cursor);
+                movies.add(movieDb);
+            } while (cursor.moveToNext());
+
+            return movies;
         }
-
-        do {
-            MovieDb movieDb = MovieUtils.getMovieByCursor(cursor);
-            movies.add(movieDb);
-        } while (cursor.moveToNext());
-        cursor.close();
-
-        return movies;
     }
 
     @Override
     public boolean moviesDownloaded() {
-
-        /**
-         * Cursor extends AutoCloseable
-         * that is why you can use (try with resources) and don't mind about close cursor.
-         * it will be closed automatically
-         */
-
         try(Cursor cursor = db.rawQuery(MovieTable.SELECT_MOVIES_COUNT, null)) {
             if (cursor == null || !cursor.moveToFirst()) {
                 return false;

@@ -1,16 +1,16 @@
 package com.example.testtask.data.base;
 
-import android.content.Context;
 import android.net.NetworkInfo;
 
 import com.example.testtask.Utils.MovieUtils;
 import com.example.testtask.Utils.NetworkUtils;
+import com.example.testtask.data.base.callback.MovieDownloadListener;
 import com.example.testtask.data.base.exception.RepositoryException;
-import com.example.testtask.data.network.callback.MovieDownloadListener;
-import com.example.testtask.data.base.callback.MovieListener;
+import com.example.testtask.data.base.callback.MoviesDownloadListener;
 import com.example.testtask.data.database.Storage;
 import com.example.testtask.data.database.movie.MovieDb;
 import com.example.testtask.data.network.Network;
+import com.example.testtask.data.network.callback.MovieNetDownloadListener;
 import com.example.testtask.data.network.movie.MovieNet;
 
 import java.util.List;
@@ -22,50 +22,42 @@ public class RepositoryImpl implements Repository {
      *
      * Look for enum with parameters
      */
-    private static final String LOADING_ERROR = "Could not download data";
-    private static final String NETWORK_ERROR = "Can not download data, check the connection to the Internet";
-    private static final String MODEL_NOT_FOUND = "Model not found";
-    private static final String MODELS_NOT_FOUND = "Models not found";
 
     private Network network;
     private Storage storage;
-    // NetworkUtils networkUtils
-    private Context context;
+    private NetworkUtils networkUtils;
 
-    // + networkUtils
-    public RepositoryImpl(Network network, Storage storage, Context context) {
+    public RepositoryImpl(Network network, Storage storage, NetworkUtils networkUtils) {
         this.network = network;
         this.storage = storage;
-        this.context = context;
+        this.networkUtils = networkUtils;
     }
 
     @Override
-    public void getMovies(final MovieListener listener) {
+    public void getMovies(final MoviesDownloadListener listener) {
         if (storage.moviesDownloaded()) {
             downloadMoviesByStorage(listener);
             return;
         }
 
-        /**
-         * networkUtils.isConnected()
-         *
-         * without context
-         */
-        if (NetworkUtils.getState(context) == NetworkInfo.State.CONNECTED) {
+        if (networkUtils.getNetworkState() == NetworkInfo.State.CONNECTED) {
             downloadMoviesByNetwork(listener);
             return;
         }
 
-        listener.error(new RepositoryException(NETWORK_ERROR));
+        listener.error(new RepositoryException(Errors.NETWORK_ERROR.description));
     }
 
     @Override
-    public Movie getMovie(int id) throws RepositoryException {
-        MovieDb movie = storage.getMovie(id);
-        if (movie == null) {
-            throw new RepositoryException(MODEL_NOT_FOUND);
+    public void getMovie(int id, final MovieDownloadListener listener) {
+        MovieDb movieDb = storage.getMovie(id);
+
+        if (movieDb == null) {
+            listener.error(new RepositoryException(Errors.MOVIE_NOT_FOUND.description));
+            return;
         }
-        return MovieUtils.getMovieByMovieDb(movie);
+
+        listener.movieDownloaded(MovieUtils.getMovieByMovieDb(movieDb));
     }
 
     @Override
@@ -74,17 +66,17 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public void downloadMovies(final MovieListener listener) {
-        if (NetworkUtils.getState(context) == NetworkInfo.State.CONNECTED) {
+    public void downloadMovies(final MoviesDownloadListener listener) {
+        if (networkUtils.getNetworkState() == NetworkInfo.State.CONNECTED) {
             downloadMoviesByNetwork(listener);
             return;
         }
 
-        listener.error(new RepositoryException(NETWORK_ERROR));
+        listener.error(new RepositoryException(Errors.NETWORK_ERROR.description));
     }
 
-    private void downloadMoviesByNetwork(final MovieListener listener) {
-        network.downloadMovies(new MovieDownloadListener() {
+    private void downloadMoviesByNetwork(final MoviesDownloadListener listener) {
+        network.downloadMovies(new MovieNetDownloadListener() {
             @Override
             public void moviesDownloaded(List<MovieNet> movies) {
 
@@ -95,12 +87,12 @@ public class RepositoryImpl implements Repository {
                 storage.addMovies(MovieUtils.getMovieDbByMovieNetList(movies));
                 List<MovieDb> dbMovies = storage.getMovies();
 
-                listener.getMovies(MovieUtils.getMoviesByMovieDbList(dbMovies));
+                listener.moviesDownloaded(MovieUtils.getMoviesByMovieDbList(dbMovies));
             }
 
             @Override
             public void loadingError(Throwable t) {
-                listener.error(new RepositoryException(LOADING_ERROR, t));
+                listener.error(new RepositoryException(Errors.LOADING_ERROR.description, t));
             }
         });
     }
@@ -108,25 +100,44 @@ public class RepositoryImpl implements Repository {
     @Override
     public void close() {
         storage.close();
-        network.close();
-        // or
         network.close(Network.ReqId.GET_MOVIES);
     }
 
-    private void downloadMoviesByStorage(MovieListener listener) {
+    private void downloadMoviesByStorage(MoviesDownloadListener listener) {
         List<MovieDb> movies = storage.getMovies();
 
         /**
-         * getMovies could not be NULL !
+         * moviesDownloaded could not be NULL !
          */
 
         if (movies == null) {
-            listener.error(new RepositoryException(MODELS_NOT_FOUND));
+            listener.error(new RepositoryException(Errors.MOVIES_NOT_FOUND.description));
             return;
         }
 
-        listener.getMovies(MovieUtils.getMoviesByMovieDbList(movies));
+        listener.moviesDownloaded(MovieUtils.getMoviesByMovieDbList(movies));
     }
 
+    private enum Errors {
+        LOADING_ERROR(0, "Could not download data"),
+        NETWORK_ERROR(1, "Can not download data, check the connection to the Internet"),
+        MOVIE_NOT_FOUND(2, "Movie not found"),
+        MOVIES_NOT_FOUND(3, "Movies not found");
 
+        private final int code;
+        private final String description;
+
+        Errors(int code, String description) {
+            this.code = code;
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public int getCode() {
+            return code;
+        }
+    }
 }
