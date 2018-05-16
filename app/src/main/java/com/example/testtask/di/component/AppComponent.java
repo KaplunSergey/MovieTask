@@ -7,8 +7,10 @@ import com.example.testtask.di.module.NetworkModule;
 import com.example.testtask.di.module.PresenterModule;
 import com.example.testtask.di.module.RepositoryModule;
 import com.example.testtask.di.module.StorageModule;
+import com.example.testtask.ui.authorizationView.view.AuthorizationActivity;
 import com.example.testtask.ui.detailView.view.MovieDetailActivity;
 import com.example.testtask.ui.mainView.view.MoviesFragment;
+import com.example.testtask.ui.registrationView.view.RegistrationActivity;
 
 import javax.inject.Singleton;
 
@@ -21,6 +23,8 @@ import dagger.Component;
 public interface AppComponent {
     void inject(MoviesFragment moviesFragment);
     void inject(MovieDetailActivity movieDetailView);
+    void inject(AuthorizationActivity authorizationActivity);
+    void inject(RegistrationActivity registrationActivity);
 
     @Component.Builder
     interface Builder{
