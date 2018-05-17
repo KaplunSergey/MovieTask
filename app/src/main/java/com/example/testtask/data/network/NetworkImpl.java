@@ -15,11 +15,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class NetworkImpl implements Network {
-    /**
-     * Better to have Map<RequestId, Call>
-     *
-     * and cancel call by RequestId
-     */
+
     private final MovieApi movieApi;
     private final LinkedHashMap<ReqId, Call> calls = new LinkedHashMap<>();
 
@@ -30,10 +26,7 @@ public class NetworkImpl implements Network {
     @Override
     public void downloadMovies(final MovieNetDownloadListener movieNetDownloadListener) {
         close(ReqId.GET_MOVIES);
-        /**
-         * better to create new call in method
-         * not in constructor and try to clone it
-         */
+
         final Call<List<MovieNet>> call = movieApi.getMovies();
         calls.put(ReqId.GET_MOVIES, call);
 

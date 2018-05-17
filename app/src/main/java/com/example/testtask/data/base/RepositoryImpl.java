@@ -115,26 +115,23 @@ public class RepositoryImpl implements Repository {
         UserDb userDb = storage.getUserByLogin(user.getLogin());
 
         if (userDb == null) {
-            listener.error(new RepositoryException("We cannot find an account"));
+            listener.error(new RepositoryException(Errors.CANNOT_FIND_USER.getDescription()));
             return;
         }
 
         KeyDb key = storage.getKey();
-
-        if (key == null) {
-            listener.error(new RepositoryException("Authorization error"));
-            return;
-        }
-
         String password = null;
+
         try {
             password = encryption.decrypt(userDb.getPassword(), key.getPrivateKey());
-        } catch (Exception e) {
+        } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeySpecException |
+                InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();
         }
 
+
         if (!user.getPassword().equals(password)) {
-            listener.error(new RepositoryException("We cannot find an account"));
+            listener.error(new RepositoryException(Errors.CANNOT_FIND_USER.getDescription()));
             return;
         }
 
@@ -146,24 +143,20 @@ public class RepositoryImpl implements Repository {
         UserDb userDb = storage.getUserByLogin(user.getLogin());
 
         if (userDb != null) {
-            listener.error(new RepositoryException("Such login is already in use"));
+            listener.error(new RepositoryException(Errors.LOGIN_IS_USED.getDescription()));
             return;
         }
 
         KeyDb key = storage.getKey();
-
-        if (key == null) {
-            //TODO error handing
-            listener.error(new RepositoryException("Register error"));
-            return;
-        }
-
         String password = null;
+
         try {
             password = encryption.encrypt(user.getPassword(), key.getPublicKey());
-        } catch (Exception e) {
+        } catch (BadPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException |
+                NoSuchPaddingException | InvalidKeyException | InvalidKeySpecException e) {
             e.printStackTrace();
         }
+
 
         UserDb newUser = new UserDb();
         newUser.setLogin(user.getLogin());
@@ -215,7 +208,10 @@ public class RepositoryImpl implements Repository {
         LOADING_ERROR(0, "Could not download data"),
         NETWORK_ERROR(1, "Can not download data, check the connection to the Internet"),
         MOVIE_NOT_FOUND(2, "Movie not found"),
-        MOVIES_NOT_FOUND(3, "Movies not found");
+        MOVIES_NOT_FOUND(3, "Movies not found"),
+        CANNOT_FIND_USER(4, "We cannot find an account"),
+        LOGIN_IS_USED(5, "Such login is already in use");
+
 
         private final int code;
         private final String description;
@@ -225,4 +221,12 @@ public class RepositoryImpl implements Repository {
             this.description = description;
         }
 
+        public String getDescription() {
+            return description;
+        }
+
+        public int getCode() {
+            return code;
+        }
+    }
 }

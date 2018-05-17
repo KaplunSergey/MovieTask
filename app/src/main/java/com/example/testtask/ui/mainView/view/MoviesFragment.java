@@ -159,8 +159,8 @@ public class MoviesFragment extends Fragment implements MoviesView {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDetach() {
+        super.onDetach();
         moviesPresenter.detachView();
     }
 

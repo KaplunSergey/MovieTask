@@ -15,9 +15,13 @@ public interface RSAEncryption {
 
     KeyPair generateKeys() throws NoSuchAlgorithmException;
 
-    String encrypt(String encrypt, String publicKey) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException;
+    String encrypt(String encrypt, String publicKey) throws BadPaddingException,
+            IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException,
+            InvalidKeySpecException, InvalidKeyException;
 
-    String decrypt(String decrypt, String privateKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException;
+    String decrypt(String decrypt, String privateKey) throws NoSuchPaddingException,
+            NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException,
+            BadPaddingException, IllegalBlockSizeException;
 
     String getPrivateKey(PrivateKey privateKey);
 

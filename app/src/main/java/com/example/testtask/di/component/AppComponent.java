@@ -21,9 +21,13 @@ import dagger.Component;
 @Component(modules = {AppModule.class, NetworkModule.class, PresenterModule.class,
         RepositoryModule.class, StorageModule.class})
 public interface AppComponent {
+
     void inject(MoviesFragment moviesFragment);
+
     void inject(MovieDetailActivity movieDetailView);
+
     void inject(AuthorizationActivity authorizationActivity);
+
     void inject(RegistrationActivity registrationActivity);
 
     @Component.Builder

@@ -21,28 +21,24 @@ import dagger.Provides;
 @Module
 public class StorageModule {
     @Provides
-    @Singleton
     @NonNull
     Storage provideStorage(MovieDAO movieDAO, KeyDAO keyDAO, UserDAO userDAO) {
         return new StorageImpl(movieDAO, keyDAO, userDAO);
     }
 
     @Provides
-    @Singleton
     @NonNull
     MovieDAO provideMovieDAO(DbHelper dbHelper) {
         return new MovieDAOImpl(dbHelper);
     }
 
     @Provides
-    @Singleton
     @NonNull
     KeyDAO provideKeyDAO(DbHelper dbHelper) {
         return new KeyDAOImpl(dbHelper);
     }
 
     @Provides
-    @Singleton
     @NonNull
     UserDAO provideUserDao(DbHelper dbHelper) {
         return new UserDAOImpl(dbHelper);
