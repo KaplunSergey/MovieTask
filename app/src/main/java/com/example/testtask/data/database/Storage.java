@@ -1,6 +1,8 @@
 package com.example.testtask.data.database;
 
+import com.example.testtask.data.database.key.KeyDb;
 import com.example.testtask.data.database.movie.MovieDb;
+import com.example.testtask.data.database.user.UserDb;
 
 import java.util.List;
 
@@ -17,6 +19,14 @@ public interface Storage {
     boolean moviesDownloaded();
 
     void deleteMovies();
+
+    KeyDb getKey();
+
+    void addKey(KeyDb key);
+
+    UserDb getUserByLogin(String login);
+
+    void addUser(UserDb user);
 
     void close();
 

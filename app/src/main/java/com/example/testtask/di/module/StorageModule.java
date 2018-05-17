@@ -4,10 +4,14 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.example.testtask.data.database.DbHelper;
+import com.example.testtask.data.database.key.KeyDAO;
+import com.example.testtask.data.database.key.KeyDAOImpl;
 import com.example.testtask.data.database.movie.MovieDAO;
 import com.example.testtask.data.database.movie.MovieDAOImpl;
 import com.example.testtask.data.database.Storage;
 import com.example.testtask.data.database.StorageImpl;
+import com.example.testtask.data.database.user.UserDAO;
+import com.example.testtask.data.database.user.UserDAOImpl;
 
 import javax.inject.Singleton;
 
@@ -19,8 +23,8 @@ public class StorageModule {
     @Provides
     @Singleton
     @NonNull
-    Storage provideStorage(MovieDAO movieDAO) {
-        return new StorageImpl(movieDAO);
+    Storage provideStorage(MovieDAO movieDAO, KeyDAO keyDAO, UserDAO userDAO) {
+        return new StorageImpl(movieDAO, keyDAO, userDAO);
     }
 
     @Provides
@@ -28,6 +32,20 @@ public class StorageModule {
     @NonNull
     MovieDAO provideMovieDAO(DbHelper dbHelper) {
         return new MovieDAOImpl(dbHelper);
+    }
+
+    @Provides
+    @Singleton
+    @NonNull
+    KeyDAO provideKeyDAO(DbHelper dbHelper) {
+        return new KeyDAOImpl(dbHelper);
+    }
+
+    @Provides
+    @Singleton
+    @NonNull
+    UserDAO provideUserDao(DbHelper dbHelper) {
+        return new UserDAOImpl(dbHelper);
     }
 
     @Provides

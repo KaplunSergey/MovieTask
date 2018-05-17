@@ -2,7 +2,7 @@ package com.example.testtask.Utils;
 
 import android.database.Cursor;
 
-import com.example.testtask.data.base.Movie;
+import com.example.testtask.data.base.model.Movie;
 import com.example.testtask.data.database.movie.MovieDb;
 import com.example.testtask.data.network.movie.MovieNet;
 

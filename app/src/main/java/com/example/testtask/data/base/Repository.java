@@ -2,7 +2,7 @@ package com.example.testtask.data.base;
 
 import com.example.testtask.data.base.callback.MovieDownloadListener;
 import com.example.testtask.data.base.callback.MoviesDownloadListener;
-import com.example.testtask.data.base.exception.RepositoryException;
+import com.example.testtask.data.base.model.Movie;
 
 public interface Repository {
 

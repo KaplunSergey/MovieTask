@@ -1,4 +1,4 @@
-package com.example.testtask.data.base;
+package com.example.testtask.data.base.model;
 
 import java.util.List;
 import java.util.Objects;

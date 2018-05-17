@@ -9,4 +9,9 @@
     <string name="menu_title">More</string>
     <string name="movies_fragment_title">Movies</string>
     <string name="movie_detail_fragment_title">Movie</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="log_in">Log in</string>
+    <string name="registration">Registration</string>
+    <string name="register">Register</string>
 </resources>

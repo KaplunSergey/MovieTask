@@ -1,7 +1,7 @@
 package com.example.testtask.ui.mainView.view;
 
-import com.example.testtask.data.base.Movie;
 import com.example.testtask.ui.base.BaseView;
+import com.example.testtask.data.base.model.Movie;
 
 import java.util.List;
 
