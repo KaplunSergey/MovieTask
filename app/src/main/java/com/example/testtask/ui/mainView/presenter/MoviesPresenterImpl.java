@@ -100,8 +100,6 @@ public class MoviesPresenterImpl implements MoviesPresenter {
 
     private void sortMovies(final Sort sort) {
 
-
-        //TODO change logic
         repository.getMovies(new MoviesDownloadListener() {
             @Override
             public void moviesDownloaded(List<Movie> movies) {

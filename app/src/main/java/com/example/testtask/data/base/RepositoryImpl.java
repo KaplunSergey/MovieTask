@@ -17,12 +17,6 @@ import java.util.List;
 
 public class RepositoryImpl implements Repository {
 
-    /**
-     * It's better to have enum with error codes and simple description
-     *
-     * Look for enum with parameters
-     */
-
     private Network network;
     private Storage storage;
     private NetworkUtils networkUtils;
