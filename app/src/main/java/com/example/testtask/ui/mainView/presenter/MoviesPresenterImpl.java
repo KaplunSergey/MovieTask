@@ -1,7 +1,7 @@
 package com.example.testtask.ui.mainView.presenter;
 
 import com.example.testtask.data.base.callback.MovieListener;
-import com.example.testtask.data.base.Movie;
+import com.example.testtask.data.base.model.Movie;
 import com.example.testtask.data.base.Repository;
 import com.example.testtask.data.base.exception.RepositoryException;
 import com.example.testtask.ui.mainView.view.MoviesView;

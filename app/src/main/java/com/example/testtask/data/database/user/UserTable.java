@@ -19,7 +19,7 @@ public interface UserTable {
     String INSERT_USER = "insert into " + TABLE + " (" + COLUMN.LOGIN +
             "," + COLUMN.PASSWORD + ") " + "values(?,?)";
 
-    String SELECT_USER = "select * from " + TABLE + " where " + COLUMN.ID + " = ?";
+    String SELECT_USER_BY_LOGIN = "select * from " + TABLE + " where " + COLUMN.LOGIN + " = ?";
 
     String UPDATE_USER_BY_ID = "update " + TABLE + " set " +
             COLUMN.LOGIN + " = ?" + " , " + COLUMN.PASSWORD + " = ?" + " where " + COLUMN.ID + " = ?";

@@ -19,7 +19,7 @@ public interface KeyTable {
     String INSERT_KEY = "insert into " + TABLE + " (" + COLUMN.PUBLIC_KEY +
             "," + COLUMN.PRIVATE_KEY + ") " + "values(?,?)";
 
-    String SELECT_KEY = "select * from " + TABLE + " where " + COLUMN.ID + " = ?";
+    String SELECT_KEY = "select * from " + TABLE;
 
     String UPDATE_KEY_BY_ID = "update " + TABLE + " set " +
             COLUMN.PUBLIC_KEY + " = ?" + " , " + COLUMN.PRIVATE_KEY + " = ?" + " where " + COLUMN.ID + " = ?";

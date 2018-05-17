@@ -9,6 +9,8 @@ import com.example.testtask.ui.detailView.presenter.MovieDetailPresenter;
 import com.example.testtask.ui.detailView.presenter.MovieDetailPresenterImpl;
 import com.example.testtask.ui.mainView.presenter.MoviesPresenter;
 import com.example.testtask.ui.mainView.presenter.MoviesPresenterImpl;
+import com.example.testtask.ui.registrationView.presenter.RegistrationPresenter;
+import com.example.testtask.ui.registrationView.presenter.RegistrationPresenterImpl;
 
 import dagger.Module;
 import dagger.Provides;
@@ -31,5 +33,11 @@ public class PresenterModule {
     @NonNull
     AuthorizationPresenter provideAuthorizationPresenter(Repository repository) {
         return new AuthorizationPresenterImpl(repository);
+    }
+
+    @Provides
+    @NonNull
+    RegistrationPresenter provideRegistrationPresenter(Repository repository) {
+        return new RegistrationPresenterImpl(repository);
     }
 }

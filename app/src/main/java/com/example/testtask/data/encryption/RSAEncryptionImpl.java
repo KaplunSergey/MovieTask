@@ -2,6 +2,7 @@ package com.example.testtask.data.encryption;
 
 import android.util.Base64;
 
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -20,13 +21,9 @@ import javax.crypto.NoSuchPaddingException;
 
 public class RSAEncryptionImpl implements RSAEncryption {
 
-    private final static String CRYPTO_METHOD = "RSA";
-    private final static int CRYPTO_BITS = 2048;
+    private static final String CRYPTO_METHOD = "RSA";
+    private static final int CRYPTO_BITS = 2048;
     private static final String CIPHER_TRANSFORMATION = "RSA/ECB/OAEPWithSHA1AndMGF1Padding";
-
-    public RSAEncryptionImpl() {
-
-    }
 
     @Override
     public KeyPair generateKeys() throws NoSuchAlgorithmException {
@@ -42,7 +39,7 @@ public class RSAEncryptionImpl implements RSAEncryption {
 
         Cipher cipher = Cipher.getInstance(CIPHER_TRANSFORMATION);
         cipher.init(Cipher.ENCRYPT_MODE, getPublicKeyByString(publicKey));
-        byte[] encryptedBytes = cipher.doFinal(Base64.decode(encrypt, Base64.DEFAULT));
+        byte[] encryptedBytes = cipher.doFinal(encrypt.getBytes(StandardCharsets.UTF_8));
 
         return Base64.encodeToString(encryptedBytes, Base64.DEFAULT);
     }
@@ -56,7 +53,7 @@ public class RSAEncryptionImpl implements RSAEncryption {
         cipher.init(Cipher.DECRYPT_MODE, getPrivateKeyByString(privateKey));
         byte[] decryptedBytes = cipher.doFinal(Base64.decode(decrypt, Base64.DEFAULT));
 
-        return Base64.encodeToString(decryptedBytes, Base64.DEFAULT);
+        return new String(decryptedBytes);
     }
 
     @Override

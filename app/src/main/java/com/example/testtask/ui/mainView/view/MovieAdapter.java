@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.example.testtask.R;
 import com.example.testtask.Utils.MovieUtils;
 import com.example.testtask.ui.mainView.callback.ClickMovieListener;
-import com.example.testtask.data.base.Movie;
+import com.example.testtask.data.base.model.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

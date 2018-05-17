@@ -22,8 +22,8 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public UserDb getUser() {
-        try(Cursor cursor = db.rawQuery(UserTable.SELECT_USER, null)) {
+    public UserDb getUserByLogin(String login) {
+        try(Cursor cursor = db.rawQuery(UserTable.SELECT_USER_BY_LOGIN, new String[]{login})) {
 
             if (cursor == null || !cursor.moveToFirst()) {
                 return null;

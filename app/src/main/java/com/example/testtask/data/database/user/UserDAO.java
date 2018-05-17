@@ -3,7 +3,7 @@ package com.example.testtask.data.database.user;
 public interface UserDAO {
     void addUser(UserDb userDb);
 
-    UserDb getUser();
+    UserDb getUserByLogin(String login);
 
     void updateUser(UserDb userDb);
 

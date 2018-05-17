@@ -14,7 +14,7 @@ import com.example.testtask.App;
 import com.example.testtask.R;
 import com.example.testtask.Utils.StringUtils;
 import com.example.testtask.common.Constant;
-import com.example.testtask.data.base.Movie;
+import com.example.testtask.data.base.model.Movie;
 import com.example.testtask.ui.detailView.presenter.MovieDetailPresenter;
 import com.squareup.picasso.Picasso;
 

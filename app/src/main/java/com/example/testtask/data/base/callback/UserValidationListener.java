@@ -1,11 +1,10 @@
 package com.example.testtask.data.base.callback;
 
-import com.example.testtask.data.base.model.Movie;
 import com.example.testtask.data.base.exception.RepositoryException;
 
-import java.util.List;
+public interface UserValidationListener {
 
-public interface MovieListener {
-    void getMovies(List<Movie> movies);
+    void isValidation();
+
     void error(RepositoryException ex);
 }
